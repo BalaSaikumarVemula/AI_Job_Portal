@@ -1,93 +1,19 @@
-/* Reset some default styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
+/* Job card applied style */
+.job-card.applied {
+    background-color: #e0f7fa;
+    border: 1px solid #00bcd4;
 }
 
-body {
-    background-color: #f5f5f5;
-    color: #333;
-    min-height: 100vh;
-}
-
-header {
-    background-color: #007BFF;
-    color: #fff;
-    padding: 15px 20px;
-    text-align: center;
-}
-
-header h1 {
-    margin-bottom: 10px;
-}
-
-nav a {
-    color: #fff;
-    text-decoration: none;
-    margin: 0 10px;
-    font-weight: bold;
-}
-
-nav a:hover {
-    text-decoration: underline;
-}
-
-main {
-    max-width: 500px;
-    margin: 30px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-form input, form button {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-form button {
-    background-color: #007BFF;
+.job-card .applied-btn {
+    background-color: #00bcd4;
     color: #fff;
     border: none;
-    cursor: pointer;
-    font-size: 16px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: not-allowed;
 }
 
-form button:hover {
-    background-color: #0056b3;
-}
-
-p {
-    text-align: center;
-}
-
-p a {
-    color: #007BFF;
-    text-decoration: none;
-}
-
-p a:hover {
-    text-decoration: underline;
-}
-
-.job-card {
-    border: 1px solid #ddd;
-    padding: 15px;
-    border-radius: 6px;
-    margin-bottom: 15px;
-    background-color: #fafafa;
-}
-
-.job-card h3 {
-    margin-bottom: 10px;
-}
-
+/* Job card normal link */
 .job-card a {
     display: inline-block;
     margin-top: 10px;
@@ -102,14 +28,7 @@ p a:hover {
     background-color: #218838;
 }
 
-footer {
-    text-align: center;
-    padding: 15px;
-    margin-top: 30px;
-    color: #555;
-    font-size: 14px;
-}
-/* Table for applications */
+/* Tables */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -139,24 +58,6 @@ tbody tr:hover {
     background-color: #f1f1f1;
 }
 
-table th, table td {
-    word-wrap: break-word;
-}
-
-table p {
-    margin: 0;
-    font-size: 14px;
-    color: #555;
-}
-
-/* Adjust main headings */
-main h2 {
-    margin-top: 30px;
-    margin-bottom: 10px;
-    color: #007BFF;
-}
-
-/* Adjust links inside table */
 table a {
     color: #007BFF;
     text-decoration: none;
@@ -165,3 +66,50 @@ table a {
 table a:hover {
     text-decoration: underline;
 }
+
+/* Forms */
+form input, form textarea, form button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+form button {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+/* Profile sections */
+.profile-info, .resume-upload, .applications {
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.profile-info h2, .resume-upload h2, .applications h2 {
+    color: #007BFF;
+    margin-bottom: 15px;
+}
+
+/* Resume upload form */
+.resume-upload form input[type="file"] {
+    padding: 5px;
+}
+
+.resume-upload form button {
+    width: auto;
+    padding: 10px 20px;
+}
+
+/* Applications table is already styled for consistency */

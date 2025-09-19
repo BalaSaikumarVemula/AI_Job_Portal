@@ -49,35 +49,38 @@ $applicationsQuery = mysqli_query($conn, "
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Your Profile</h1>
-        <nav>
-            <a href="dashboard.php">Dashboard</a>
-            <a href="jobs.php">Jobs</a>
-            <a href="logout.php">Logout</a>
-        </nav>
-    </header>
+<header>
+    <h1>Your Profile</h1>
+    <nav>
+        <a href="dashboard.php">Dashboard</a>
+        <a href="jobs.php">Jobs</a>
+        <a href="logout.php">Logout</a>
+    </nav>
+</header>
 
-    <main>
-        <div class="job-card">
-            <h2>Personal Info</h2>
-            <p><strong>Name:</strong> <?php echo htmlspecialchars($user['name']); ?></p>
-            <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
+<main>
+    <!-- Personal Info -->
+    <section class="profile-info">
+        <h2>Personal Info</h2>
+        <p><strong>Name:</strong> <?php echo htmlspecialchars($user['name']); ?></p>
+        <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
+    </section>
 
-            <?php if(isset($error)) { echo "<p style='color:red;'>$error</p>"; } ?>
+    <!-- Resume Upload -->
+    <section class="resume-upload">
+        <h2>Resume Upload</h2>
+        <?php if(isset($error)) { echo "<p style='color:red;'>$error</p>"; } ?>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="resume" accept=".pdf,.doc,.docx">
+            <?php if(!empty($user['resume'])){ ?>
+                <p>Current Resume: <a href="<?php echo $user['resume']; ?>" target="_blank">View</a></p>
+            <?php } ?>
+            <button type="submit" name="upload">Upload Resume</button>
+        </form>
+    </section>
 
-            <form method="POST" enctype="multipart/form-data">
-                <label>Upload Resume (optional):</label>
-                <input type="file" name="resume" accept=".pdf,.doc,.docx">
-                
-                <?php if(!empty($user['resume'])){ ?>
-                    <p>Current Resume: <a href="<?php echo $user['resume']; ?>" target="_blank">View</a></p>
-                <?php } ?>
-
-                <button type="submit" name="upload">Upload Resume</button>
-            </form>
-        </div>
-
+    <!-- Applications Table -->
+    <section class="applications">
         <h2>My Applications</h2>
         <?php if(mysqli_num_rows($applicationsQuery) > 0){ ?>
             <table>
@@ -103,10 +106,7 @@ $applicationsQuery = mysqli_query($conn, "
         <?php } else { ?>
             <p>You have not applied for any jobs yet.</p>
         <?php } ?>
-    </main>
-
-    <footer>
-        <p>&copy; <?php echo date("Y"); ?> AI Job Portal. All rights reserved.</p>
-    </footer>
+    </section>
+</main>
 </body>
 </html>

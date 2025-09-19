@@ -8,16 +8,21 @@ include "db.php";
 
 $email = $_SESSION['email'];
 
-// Use prepared statement for safety
-$stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
+// Fetch user info
+$userQuery = mysqli_query($conn, "SELECT * FROM users WHERE email='$email'");
+$user = mysqli_fetch_assoc($userQuery);
 
-// Fetch jobs (latest 5)
-$jobsQuery = $conn->query("SELECT * FROM jobs ORDER BY created_at DESC LIMIT 5");
+// Fetch user's applied job IDs
+$appliedQuery = mysqli_query($conn, "SELECT job_id FROM applications WHERE email='$email'");
+$appliedJobs = [];
+while($row = mysqli_fetch_assoc($appliedQuery)){
+    $appliedJobs[] = $row['job_id'];
+}
+
+// Fetch all jobs (later you can replace with AI recommendations)
+$jobsQuery = mysqli_query($conn, "SELECT * FROM jobs ORDER BY created_at DESC");
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,36 +32,36 @@ $jobsQuery = $conn->query("SELECT * FROM jobs ORDER BY created_at DESC LIMIT 5")
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Welcome, <?php echo htmlspecialchars($user['name']); ?></h1>
-        <nav>
-            <a href="profile.php">Profile</a>
-            <a href="jobs.php">Jobs</a>
-            <a href="logout.php">Logout</a>
-        </nav>
-    </header>
+<header>
+    <h1>Welcome, <?php echo htmlspecialchars($user['name']); ?></h1>
+    <nav>
+        <a href="dashboard.php">Dashboard</a>
+        <a href="jobs.php">Jobs</a>
+        <a href="profile.php">Profile</a>
+        <a href="logout.php">Logout</a>
+    </nav>
+</header>
 
-    <main>
-        <h2>Recommended Jobs for You</h2>
-        <p>Check out AI-generated job recommendations below.</p>
-
-        <?php if($jobsQuery->num_rows > 0): ?>
-            <?php while($job = $jobsQuery->fetch_assoc()): ?>
-                <div class="job-card">
-                    <h3><?php echo htmlspecialchars($job['title']); ?></h3>
-                    <p><strong>Location:</strong> <?php echo htmlspecialchars($job['location']); ?></p>
-                    <p><?php echo nl2br(htmlspecialchars($job['description'])); ?></p>
-                    <small><em>Posted on: <?php echo $job['created_at']; ?></em></small><br>
-                    <a href="apply.php?job_id=<?php echo $job['id']; ?>">Apply Now</a>
-                </div>
-            <?php endwhile; ?>
-        <?php else: ?>
-            <p>No job recommendations available right now.</p>
-        <?php endif; ?>
-    </main>
-
-    <footer>
-        <p>&copy; <?php echo date("Y"); ?> AI Job Portal. All rights reserved.</p>
-    </footer>
+<main>
+    <h2>Recommended Jobs for You</h2>
+    <?php if(mysqli_num_rows($jobsQuery) > 0){ ?>
+        <?php while($job = mysqli_fetch_assoc($jobsQuery)){ 
+            $alreadyApplied = in_array($job['id'], $appliedJobs);
+        ?>
+            <div class="job-card <?php echo $alreadyApplied ? 'applied' : ''; ?>">
+                <h3><?php echo htmlspecialchars($job['title']); ?></h3>
+                <p><?php echo htmlspecialchars($job['description']); ?></p>
+                <p><strong>Location:</strong> <?php echo htmlspecialchars($job['location']); ?></p>
+                <?php if($alreadyApplied){ ?>
+                    <button class="applied-btn" disabled>Already Applied</button>
+                <?php } else { ?>
+                    <a href="apply.php?job_id=<?php echo $job['id']; ?>">Apply</a>
+                <?php } ?>
+            </div>
+        <?php } ?>
+    <?php } else { ?>
+        <p>No jobs available at the moment. Please check back later.</p>
+    <?php } ?>
+</main>
 </body>
 </html>
